@@ -5,7 +5,10 @@ workflows:
       flutter: stable
       java: 17
       android_signing:
-        - keystore: my_keystore_reference  # Replace with actual keystore reference
+        - keystore: my-key-alias  # Keystore alias name from your keystore details
+          # Optional, if you are using an environment variable for password
+          # Keystore alias name
+          # Optional, if you are using an environment variable for password
     scripts:
       - name: Clear Flutter and Gradle Cache
         script: |
