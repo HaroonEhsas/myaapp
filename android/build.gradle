@@ -1,11 +1,11 @@
 buildscript {
-    ext.kotlin_version = '1.9.0' // Update Kotlin version if needed
+    ext.kotlin_version = '1.9.0'  // Update Kotlin version if needed
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.2' // Update AGP version here
+        classpath 'com.android.tools.build:gradle:8.2.2'  // Update AGP version here
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -14,5 +14,28 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+    }
+}
+
+subprojects {
+    project.afterEvaluate {
+        if (project.hasProperty("android")) {
+            android {
+                signingConfigs {
+                    release {
+                        storeFile file(System.getenv("KEYSTORE_PATH"))
+                        storePassword System.getenv("KEYSTORE_PASSWORD")
+                        keyAlias System.getenv("KEY_ALIAS")
+                        keyPassword System.getenv("KEY_PASSWORD")
+                    }
+                }
+
+                buildTypes {
+                    release {
+                        signingConfig signingConfigs.release
+                    }
+                }
+            }
+        }
     }
 }

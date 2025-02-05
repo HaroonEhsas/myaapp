@@ -4,19 +4,17 @@ workflows:
     environment:
       flutter: stable
       java: 17
-      vars:
-        # Define environment variables here
-        KEYSTORE_PATH: "C:/Users/Gaming/Desktop/project/my_app"  # Full path to your keystore file
-        KEYSTORE_PASSWORD: "123456"  # Keystore password
-        KEY_ALIAS: "my-key-alias"  # Your key alias
-        KEY_PASSWORD: "123456"  # Key password
+      android_signing:
+        - keystore: my_keystore_reference  # Replace with your actual keystore reference
     scripts:
-      - name: Clear Flutter and Gradle Cache
+      - name: Clean Flutter and Gradle Cache
         script: |
           flutter clean
           flutter pub get
+          rm -rf android/.gradle
+          rm -rf android/build
+          rm -rf build
       - name: Build Release APK
-        script: |
-          flutter build apk --release --no-shrink
+        script: flutter build apk --release --no-shrink
     artifacts:
       - build/app/outputs/flutter-apk/app-release.apk
