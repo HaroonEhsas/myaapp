@@ -1,0 +1,28 @@
+#file: noinspection YAMLSchemaValidation
+workflows:
+  android-release:
+    name: Android Release Build
+    instance_type: mac_mini_m1
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      java: 17
+      android_signing:
+        keystore_path: keystore.keystore
+        keystore_password: $CM_KEYSTORE_PASSWORD
+        key_alias: $CM_KEY_ALIAS
+        key_password: $CM_KEY_PASSWORD
+    scripts:
+      - name: Clear Flutter and Gradle Cache
+        script: |
+          rm -rf ~/.gradle/caches
+          flutter clean
+          flutter pub get
+      - name: Build Release APK
+        script: flutter build apk --release
+    artifacts:
+      - build/app/outputs/flutter-apk/app-release.apk
+    publishing:
+      email:
+        recipients:
+          - "haroo.khoshb11@gmail.com"
