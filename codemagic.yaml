@@ -1,3 +1,4 @@
+#file: noinspection YAMLSchemaValidation
 workflows:
   android-release:
     name: Android Release Build
@@ -5,15 +6,17 @@ workflows:
       flutter: stable
       java: 17
       android_signing:
-        - keystore: my-key-alias  # Replace with your actual keystore reference
+        keystore:
+          type: file
+          filePath: /tmp/keystore.jks  # Codemagic will set this automatically
+          keystore_password: $CM_KEYSTORE_PASSWORD
+          key_alias: $CM_KEY_ALIAS
+          key_password: $CM_KEY_PASSWORD
     scripts:
-      - name: Clean Flutter and Gradle Cache
+      - name: Clear Flutter and Gradle Cache
         script: |
           flutter clean
           flutter pub get
-          rm -rf android/.gradle
-          rm -rf android/build
-          rm -rf build
       - name: Build Release APK
         script: flutter build apk --release --no-shrink
     artifacts:
